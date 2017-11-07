@@ -1,0 +1,20 @@
+---
+# This playbook deploys a builder for creating raspbian images. It's based on the smart-home example
+
+# based on the ansible example https://github.com/ansible/ansible-examples/tree/master/lamp_simple
+
+- name: Create Infrastructure
+  hosts: 
+    - all
+  sudo: yes
+  #  gather_facts: no # need these for ansible_env to be set
+
+  roles:
+    - configure
+
+
+
+# smoke tests
+#    - { role: hubaccess-test, tags: 'smoketest'}
+#    - { role: hub-connect-test, tags: 'smoketest' }
+#    - { role: open-pumpkin-test, tags: 'smoketest' }

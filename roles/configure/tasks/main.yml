@@ -1,0 +1,20 @@
+##
+#
+- apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+      - docker.io
+      - docker-compose
+
+# Set up docker permissions
+- file:
+    path: /var/run/docker.sock
+    group: "{{ ansible_ssh_user  }}"
+  
+- name: run docker-compose
+  command: docker-compose up
+  args:
+      chdir: /vagrant
+  
+
