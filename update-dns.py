@@ -50,6 +50,20 @@ suite.addTest (TestGodaddy ('test_duplicate_records_fail'))
 
 runner = unittest2.TextTestRunner()
 
+# hosts that there should only be one of, <tagged name  of ec2 instance> : <hostname>
+
+#singletonHosts = {"CICD": "jenkins" }
+#
+#class SingletonHost ():
+#    def __init__ (tagvalue):
+#        self.ec2 = boto3.resource('ec2')
+#        self.filter = [{'Name': 'tag:Name', 'Values': ['{}'.tagvalue]}, {'Name': 'instance-state-name', 'Values': ['running']}]
+## Get information for all running instances
+#        self.running_instances = self.ec2.instances.filter(Filters=self.filter)
+#
+#
+
+
 ec2 = boto3.resource('ec2')
 filter = [{'Name': 'tag:Name', 'Values': ['CICD']}, {'Name': 'instance-state-name', 'Values': ['running']}]
 # Get information for all running instances
@@ -105,4 +119,7 @@ for ri in running_instances:
     print (client.update_record_ip ("{}".format (ri.public_ip_address), "iotaa.co.uk", "jenkins", "A"))
 
 print (client.get_records ("iotaa.co.uk", record_type="A"))
+
+# instant hack
+print (client.add_record ('iotaa.co.uk', {'data': '34.241.193.240', 'name': 'elk', 'ttl': 600, 'type': 'A'}))
 

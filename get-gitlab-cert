@@ -1,0 +1,1 @@
+certbot certonly  --agree-tos --webroot --webroot-path=/var/www/public/letsencrypt --email tim.coote@differentis.com --preferred-challenges http -d gitlab.iotaa.co.uk -n
