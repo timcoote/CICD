@@ -1,35 +1,37 @@
 version: '2'
 services:
-    jenkins:
-        image: "jenkins/jenkins:lts"
-        ports:
-        - 8080:8080
-        - 5000:5000
-        volumes:
-        - jenkins_home:/var/jenkins_home
-
-# from http://bit.ly/2zoltMt. Can this service be called gitlab?
-    web:
-      image: 'gitlab/gitlab-ce:latest'
-      restart: always
-      hostname: 'gitlab.example.com'
-      environment:
-        GITLAB_OMNIBUS_CONFIG: |
-            external_url 'https://gitlab.iotaa.co.uk:9090'
-            gitlab_rails['gitlab_shell_ssh_port'] = 2224
+     gitlab:
+       image: 'gitlab/gitlab-ce:latest'
+       restart: always
+       hostname: 'gitlab.iotaa.co.uk'
+       environment:
+         GITLAB_OMNIBUS_CONFIG: |
+          external_url 'https://gitlab.iotaa.co.uk'
           # Add any other gitlab.rb configuration here, each on its own line
-      ports:
-        - 80:80
-        - '9090:9090'
-        - '2224:22'
-      volumes:
-        - '/srv/gitlab/config:/etc/gitlab'
-        - '/srv/gitlab/logs:/var/log/gitlab'
-        - '/srv/gitlab/data:/var/opt/gitlab'
-    
-        
+       ports:
+        - '80:80'
+        - '443:443'
+        - '2222:22'
+       volumes:
+        # the ansible script creates these dirs as an empty dir cannot live in the
+        # source project
+        - './docker/service/gitlab/config:/etc/gitlab'
+        - './docker/service/gitlab/logs:/var/log/gitlab'
+        - './docker/service/gitlab/data:/var/opt/gitlab'
+
+#     jenkins:
+#        image: "jenkins/jenkins:lts"
+#        volumes:
+#        - jenkins_home:/var/jenkins_home
+
+#     nginx:
+#        image: "nginx"
+#        ports:
+#        - 80:80
+#        volumes:
+#        # this exist in the source project as it's an actual file
+#        - ./docker/service/nginx/CICD.conf:/etc/nginx/conf.d/CICD.conf
+
 volumes:
     jenkins_home: {}
-    gitlab_home: {}
-
-
+#    gitlab_home: {}

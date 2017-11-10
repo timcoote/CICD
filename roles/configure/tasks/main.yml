@@ -11,10 +11,26 @@
 - file:
     path: /var/run/docker.sock
     group: "{{ ansible_ssh_user  }}"
-  
-- name: run docker-compose
-  command: docker-compose up
-  args:
-      chdir: /vagrant
+
+# Ensure that we have the various files that we want to map in to the containers
+# gitlab
+- name: Creates gitlab config directory
+  file:
+    path: /vagrant/docker/service/gitlab/config
+    recurse: yes  
+- name: Creates gitlab logs directory
+  file:
+    path: /vagrant/docker/service/gitlab/logs
+    recurse: yes
+- name: Creates gitlab data directory
+  file:
+    path: /vagrant/docker/service/gitlab/data
+    recurse: yes
+#nginx
+
+#- name: run docker-compose
+#  command: docker-compose up
+#  args:
+#      chdir: /vagrant
   
 
