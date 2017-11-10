@@ -121,5 +121,5 @@ for ri in running_instances:
 print (client.get_records ("iotaa.co.uk", record_type="A"))
 
 # instant hack
-print (client.add_record ('iotaa.co.uk', {'data': '34.241.193.240', 'name': 'elk', 'ttl': 600, 'type': 'A'}))
+#print (client.add_record ('iotaa.co.uk', {'data': '34.241.193.240', 'name': 'elk', 'ttl': 600, 'type': 'A'}))
 

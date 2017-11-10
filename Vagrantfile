@@ -27,6 +27,7 @@ Vagrant.configure("2") do |config|
       aws.tags = {
           'Name' => 'CICD'
       }
+      aws.elastic_ip = "34.241.91.17"
    end
 
    config.vm.provision "file", source: "~/.aws/credentials", destination: "/home/ubuntu/.aws/credentials"
