@@ -1,1 +1,3 @@
-certbot certonly  --agree-tos --webroot --webroot-path=/var/www/public/letsencrypt --email tim.coote@differentis.com --preferred-challenges http -d gitlab.iotaa.co.uk -n
+# use staging to set up the mechanism, then remove it. staging avoids getting throttled after 5 cert requests, but it produces an incomplete chain
+certbot certonly --agree-tos --webroot --webroot-path=/var/www/public/letsencrypt --email tim.coote@differentis.com --preferred-challenges http -d gitlab.iotaa.co.uk -n
+#certbot certonly  --staging --agree-tos --webroot --webroot-path=/var/www/public/letsencrypt --email tim.coote@differentis.com --preferred-challenges http -d gitlab.iotaa.co.uk -n

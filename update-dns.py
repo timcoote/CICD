@@ -37,6 +37,8 @@ class TestGodaddy (unittest2.TestCase):
     def setUp (self):
         self.client = Client (Account (api_key=os.environ['godaddy_key'], api_secret=os.environ['godaddy_secret']))
         
+# this needs fixing to read the record first, then re-add it
+    @unittest2.skip ("fixme and implement")
     def test_duplicate_records_fail (self):
         # with self.assertRaises (HTTPError):
         #with self.assertRaises (Exception):
@@ -52,16 +54,34 @@ runner = unittest2.TextTestRunner()
 
 # hosts that there should only be one of, <tagged name  of ec2 instance> : <hostname>
 
-#singletonHosts = {"CICD": "jenkins" }
+singletonHosts = {"CICD": "jenkins", "aos_elk": "ELK", "hubcentral": "hubcentral" }
 #
-#class SingletonHost ():
-#    def __init__ (tagvalue):
-#        self.ec2 = boto3.resource('ec2')
-#        self.filter = [{'Name': 'tag:Name', 'Values': ['{}'.tagvalue]}, {'Name': 'instance-state-name', 'Values': ['running']}]
+class SingletonHost ():
+    def __init__ (self, tagvalue):
+        self.ec2 = boto3.resource('ec2')
+        self.filter = [{'Name': 'tag:Name', 'Values': ['{}'.format (tagvalue)]}, {'Name': 'instance-state-name', 'Values': ['running']}]
+        print ("filter, {}".format (self.filter))
 ## Get information for all running instances
-#        self.running_instances = self.ec2.instances.filter(Filters=self.filter)
-#
-#
+        self.running_instances = self.ec2.instances.filter(Filters=self.filter)
+
+    def count (self):
+        return count_instances (self.running_instances)
+
+
+class TestSingleHost (unittest2.TestCase):
+    def setUp (self):
+        self.verificationErrors = []
+
+    def test_count (self):
+        for tag, role in singletonHosts.items():
+            sh = SingletonHost (tag)
+            with self.subTest (sh = sh):
+                print ("host: {} {}".format (tag, role))
+                self.assertEqual (sh.count (), 1, "wrong number of {}".format (role))
+
+    def tearDown (self):
+        self.assertEqual ([], self.verificationErrors, "".join ([ x for x in self.verificationErrors] ))
+
 
 
 ec2 = boto3.resource('ec2')
@@ -69,6 +89,7 @@ filter = [{'Name': 'tag:Name', 'Values': ['CICD']}, {'Name': 'instance-state-nam
 # Get information for all running instances
 running_instances = ec2.instances.filter(Filters=filter)
 
+suite.addTest (TestSingleHost ('test_count'))
 runner.run (suite)
 
 

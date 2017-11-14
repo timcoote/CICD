@@ -6,7 +6,7 @@ services:
        hostname: 'gitlab.iotaa.co.uk'
        environment:
          GITLAB_OMNIBUS_CONFIG: |
-          external_url 'https://gitlab.iotaa.co.uk'
+          external_url 'http://gitlab.iotaa.co.uk'
           # Add any other gitlab.rb configuration here, each on its own line
        ports:
         - '80:80'
